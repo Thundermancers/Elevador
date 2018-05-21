@@ -1,3 +1,4 @@
+%% Valores encontrados com experimetos
 s = tf( [1,0], [1] )
 
 Kt = 0.83*10^(-3)
@@ -12,21 +13,8 @@ D = (Kt*Kce)/Jm
 %% Função de transferência Theta/Ea
 G = N/(s*(s+D))
 
-%% Realimentação unitária negativa
-G1 = G/(G+1)
-
 %% Transformação de Theta em distância
 G2 = G*r
-
-%% Wn e Zeta
-Wn = sqrt(5.479e-07)
-Zeta = (1.585e-4)/(2*Wn)
-
-%% Realimentação unitária negativa
-G3 = G2/(G2+1)
-
-%% Precisamos de um ganho de menor que 9.4084e-4
-K_c = 1e-5
 
 %% Gannho proporcional para transformar em um sistema de 2 ordem superamortecido
 Pb = 8e-1
@@ -38,5 +26,22 @@ can = 4*Dt*Ir
 
 %% Controlador PID
 C = (100/Pb)*(s^2*Dt + s + Ir)/s
+CF = 30e5*(s+0.0000361803)*(s+0.0000138197)/s
 
+%% Controlador físico 1
+K_1 = 100
+R1C1_1 = 1/0.0000361803
+R2C2_1 = 1/0.000138197
+C1 = K_1 * (R2C2_1*s + 1) * (R1C1_1*s + 1) / (R2C2_1*s);
 
+%% Controlador físico comercial 1
+K_2 = 3e3
+R1C1_2 = 1e3 
+R2C2_2 = 5e2 
+C2 = K_2 * (R2C2_2*s + 1) * (R1C1_2*s + 1) / (R2C2_2*s);
+
+% %% Controlador físico comercial 2
+% K_4 = 3
+% R1C1_4 = 270 
+% R2C2_4 = 720 
+% C4 = K_4 * (R2C2_4*s + 1) * (R1C1_4*s + 1) / (R2C2_4*s);
